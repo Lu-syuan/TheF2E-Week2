@@ -5,9 +5,9 @@
     </div>
     <div class="navbar">
       <ul>
-        <li>邀請他人簽屬</li>
+        <li><a href="" class="disable">邀請他人簽屬</a></li>
         <li><router-link to="/NewFile">簽署新文件</router-link></li>
-        <li>登入</li>
+        <li><a href="" @click="login">登入</a></li>
       </ul>
     </div>
   </nav>
@@ -15,9 +15,14 @@
 
 <script>
 export default {
+  props: ['showLogin'],
   methods: {
     jump () {
       this.$router.push({ path: '/' })
+    },
+    login (e) {
+      e.preventDefault()
+      this.$emit('Login', !this.showLogin)
     }
   }
 }
@@ -46,21 +51,24 @@ export default {
       justify-content: center;
       align-items: center;
       > li {
-        display: inline-block;
-        color: $secondary;
-        letter-spacing: 0.2em;
-        @extend %fontFamily;
-        @extend %HeadLine3;
-        padding: 0 15px;
-        text-decoration: none;
-
         > a {
+          display: inline-block;
+          color: $secondary;
+          letter-spacing: 0.2em;
+          @extend %fontFamily;
+          @extend %HeadLine4;
+          padding: 0 15px;
+          text-decoration: none;
           text-decoration: none;
           color: $secondary;
         }
-      }
-      > li:nth-child(1) {
-        color: #e2e1dd;
+        > a:hover {
+          text-decoration: none;
+          color: $primary;
+        }
+        > .disable {
+          color: #e2e1dd;
+        }
       }
     }
   }

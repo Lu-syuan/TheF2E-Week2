@@ -5,7 +5,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    login () {
+      this.show = true
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
