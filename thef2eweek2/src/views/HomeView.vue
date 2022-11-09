@@ -46,7 +46,6 @@ export default {
     position: absolute;
     top: 25.83%;
     left: 56.77%;
-    //     left: 50%;
     > .logo {
       width: 468px;
       height: 117px;
