@@ -1,19 +1,35 @@
 <template>
-  <div>
+  <div id="NewFile">
     <nav-section></nav-section>
     <router-view></router-view>
-    <h1><router-link to="/NewFile/UpLoad">upload</router-link></h1>
+    <FooterSection></FooterSection>
   </div>
 </template>
 
 <script>
 import NavSection from '../components/NavSection.vue'
+import FooterSection from '../components/FooterSection.vue'
+
 // import HomeViewVue from './views/HomeView.vue'
 
 export default {
   components: {
-    NavSection: NavSection
-    // HomeView: HomeViewVue
+    NavSection: NavSection,
+    FooterSection: FooterSection
   }
 }
 </script>
+
+//
+<style scoped lang="scss">
+// @import '../assets/main.scss';
+// @import '../assets/cssreset.css';
+
+// #NewFile {
+//   > router-view {
+//     height: 80vh;
+//     background: #ccc;
+//   }
+// }
+//
+</style>

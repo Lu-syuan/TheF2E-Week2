@@ -6,7 +6,7 @@
     <div class="navbar">
       <ul>
         <li><a href="" class="disable">邀請他人簽屬</a></li>
-        <li><router-link to="/NewFile">簽署新文件</router-link></li>
+        <li><router-link to="/NewFile/UpLoad">簽署新文件</router-link></li>
         <li><a href="" @click="login">登入</a></li>
       </ul>
     </div>

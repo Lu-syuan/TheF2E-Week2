@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     jump () {
-      this.$router.push({ path: '/NewFile' })
+      this.$router.push({ path: '/NewFile/UpLoad' })
     },
     Login (show) {
       console.log(show)
