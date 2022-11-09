@@ -1,25 +1,11 @@
 <template>
   <div id="app">
-    <nav-section></nav-section>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import NavSection from './components/nav.vue'
-
-// export default {
-//   components: {
-//     NavSection: NavSection
-//   }
-// }
-
-import NavSection from './components/NavSection.vue'
-
-export default {
-  components: {
-    NavSection: NavSection
-  }
-}
+export default {}
 </script>
 
 <style scoped lang="scss">

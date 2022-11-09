@@ -1,14 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import HomeSection from '../views/HomeView.vue'
+import NewFile from '../views/NewFile.vue'
+import UpLoad from '../components/UpLoad.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'home',
-  //   component: HomeView
-  // },
+  {
+    path: '/',
+    name: 'home',
+    component: HomeSection
+  },
+  {
+    path: '/NewFile',
+    name: 'NewFile',
+    component: NewFile,
+    children: [
+      {
+        path: 'UpLoad',
+        component: UpLoad
+      }
+    ]
+  }
 ]
 
 const router = new VueRouter({

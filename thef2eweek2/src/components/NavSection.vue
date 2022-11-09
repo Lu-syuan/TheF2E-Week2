@@ -1,20 +1,29 @@
 <template>
   <nav id="nav">
-    <div class="logo">
+    <div class="logo" @click="jump">
       <img src="../assets/image/LOGO-2.png" alt="" />
     </div>
     <div class="navbar">
       <ul>
         <li>邀請他人簽屬</li>
-        <li>簽署新文件</li>
+        <li><router-link to="/NewFile">簽署新文件</router-link></li>
         <li>登入</li>
       </ul>
     </div>
   </nav>
 </template>
 
+<script>
+export default {
+  methods: {
+    jump () {
+      this.$router.push({ path: '/' })
+    }
+  }
+}
+</script>
+
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap');
 @import '../assets/main.scss';
 @import '../assets/cssreset.css';
 
@@ -29,6 +38,7 @@
   > .logo {
     width: 100px;
     height: 25px;
+    cursor: pointer;
   }
   > .navbar {
     > ul {
@@ -42,6 +52,12 @@
         @extend %fontFamily;
         @extend %HeadLine3;
         padding: 0 15px;
+        text-decoration: none;
+
+        > a {
+          text-decoration: none;
+          color: $secondary;
+        }
       }
       > li:nth-child(1) {
         color: #e2e1dd;
