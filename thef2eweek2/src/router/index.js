@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeSection from '../views/HomeView.vue'
 import NewFile from '../views/NewFile.vue'
 import UpLoad from '../components/UpLoad.vue'
+import SignName from '../components/SignName.vue'
 
 Vue.use(VueRouter)
 
@@ -20,6 +21,10 @@ const routes = [
       {
         path: 'UpLoad',
         component: UpLoad
+      },
+      {
+        path: 'SignName',
+        component: SignName
       }
     ]
   }

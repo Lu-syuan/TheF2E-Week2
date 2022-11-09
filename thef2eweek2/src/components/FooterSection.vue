@@ -8,7 +8,11 @@
         <div class="circle">3</div>
       </div>
       <div class="btn">
-        <button v-for="btn in FooterBtn" :key="btn.id">
+        <button
+          v-for="btn in FooterBtn"
+          :key="btn.id"
+          @click="ChangePage(btn.value)"
+        >
           {{ btn.value }}
         </button>
       </div>
@@ -22,8 +26,20 @@ export default {
     return {
       FooterBtn: [
         { id: 0, value: '取消', display: true },
-        { id: 1, value: '創建文件', display: true }
+        { id: 1, value: '開啟文件', display: true }
       ]
+    }
+  },
+  methods: {
+    ChangePage (value) {
+      switch (value) {
+        case '取消':
+          this.$router.push({ path: '/NewFile/UpLoad' })
+          break
+        case '開啟文件':
+          this.$router.push({ path: '/NewFile/SignName' })
+          break
+      }
     }
   }
 }
@@ -42,39 +58,6 @@ export default {
     display: flex;
     align-content: center;
     justify-content: space-between;
-    > .progress-container {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      margin-bottom: 30px;
-      max-width: 100%;
-      width: 270px;
-      z-index: 10;
-    }
-    > .progress-container::before {
-      content: '';
-      background-color: black;
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      z-index: -1;
-      transform: translateY(-50%); /*線條往上移動*/
-      > div.circle {
-        color: white;
-        background-color: #f34764;
-        border: 3px solid var(--line-border-empty);
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        /* 讓數字置中對齊 */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: border 0.5s linear;
-      }
-    }
   }
 }
 </style>

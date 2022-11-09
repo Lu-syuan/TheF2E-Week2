@@ -140,11 +140,15 @@ export default {
         color: $secondary;
         cursor: pointer;
       }
-      > .NewFile.isclick,
-      .OldFile.isclick {
+      > .NewFile.isclick {
         background-color: $white;
         color: $primary;
         box-shadow: 8px -4px 4px rgba(238, 237, 232, 0.5);
+      }
+      > .OldFile.isclick {
+        background-color: $white;
+        color: $primary;
+        box-shadow: -8px -4px 4px rgba(238, 237, 232, 0.5);
       }
     }
     > .content-NewFile,
