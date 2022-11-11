@@ -1,11 +1,18 @@
 <template>
   <footer id="footer">
     <div class="container">
-      <div class="progress-container">
-        <div id="progress" class="progress"></div>
-        <div class="circle active">1</div>
-        <div class="circle">2</div>
-        <div class="circle">3</div>
+      <div class="step">
+        <div class="text">
+          <p>上傳文件</p>
+          <p>進行簽署</p>
+          <p>下載文件</p>
+        </div>
+        <div class="progress-container">
+          <div id="progress" class="progress"></div>
+          <div class="circle active"></div>
+          <div class="circle"></div>
+          <div class="circle"></div>
+        </div>
       </div>
       <div class="btn">
         <button
@@ -58,6 +65,71 @@ export default {
     display: flex;
     align-content: center;
     justify-content: space-between;
+    align-items: center;
+    > .step {
+      > .text {
+        display: flex;
+        width: 400px;
+        justify-content: space-between;
+        align-items: center;
+        margin-left: -25px;
+        margin-bottom: 10px;
+        > p {
+          @extend %HeadLine4;
+          @extend %fontFamily;
+          color: $secondary;
+        }
+      }
+      > .progress-container {
+        position: relative;
+        width: 350px;
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        > .progress {
+          position: absolute;
+        }
+        > .circle {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          border: 3px solid $white;
+          background: $secondary;
+          box-shadow: 0px 4px 4px #eeede8;
+          z-index: 10;
+        }
+      }
+      > .progress-container::before {
+        content: '';
+        background-color: $white;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        z-index: 1;
+        transform: translateY(-50%); /*線條往上移動*/
+        box-shadow: 0px 4px 4px #eeede8;
+      }
+    }
+
+    > .btn {
+      > button {
+        cursor: pointer;
+        width: 180px;
+        height: 60px;
+        border-radius: 35px;
+        background: $white;
+        color: $secondary;
+        @extend %HeadLine3;
+        @extend %fontFamily;
+        line-height: 60px;
+        outline: none;
+        border: none;
+        box-shadow: 0px 4px 4px #eeede8;
+        margin-left: 15px;
+      }
+    }
   }
 }
 </style>
