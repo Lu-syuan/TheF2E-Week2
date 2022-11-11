@@ -16,12 +16,17 @@
         <div class="MySign">
           <p>我的簽名 (直接拖曳使用)</p>
           <!-- 使用v-for 顯示自己的簽名-->
-          <ul>
-            <li></li>
+          <ul class="doneSign" v-if="imgs.length !== 0">
+            <li v-for="(item, index) in imgs" :key="index">
+              <div class="pic">
+                <img :src="item" alt="" />
+              </div>
+              <div class="delete" @click="deleteImg(index)"></div>
+            </li>
           </ul>
 
           <ul class="create">
-            <li>
+            <li @click="showCanvas">
               <p>創建簽名</p>
               <div class="icon pen"></div>
             </li>
@@ -40,7 +45,7 @@
     <!-- 顯示pdf end-->
 
     <!-- Canvas -->
-    <div id="canvas-bg">
+    <div id="canvas-bg" :style="`display:${show}`">
       <div class="container">
         <p>在框格內簽下大名</p>
         <canvas
@@ -73,8 +78,8 @@
             </li>
           </ul>
           <ul>
-            <li class="btn cancel">取消</li>
-            <li class="btn enter">簽好了</li>
+            <li class="btn cancel" @click="showCanvas">取消</li>
+            <li class="btn enter" @click="saveImage">簽好了</li>
           </ul>
         </div>
       </div>
@@ -86,6 +91,8 @@
 export default {
   data () {
     return {
+      imgId: 0,
+      show: 'none',
       canvas: null,
       canvasContext: null,
       colors: [
@@ -95,7 +102,7 @@ export default {
       ],
       isPainting: false,
       currentColor: null,
-      img: []
+      imgs: []
     }
   },
   mounted () {
@@ -103,6 +110,14 @@ export default {
     this.setCanvas()
   },
   methods: {
+    showCanvas () {
+      if (this.show === 'none') {
+        this.show = 'initial'
+      } else if (this.show === 'initial') {
+        this.show = 'none'
+      }
+      this.reset()
+    },
     setCanvas () {
       this.canvas = this.$refs.canvas
       const canvas = this.$refs.canvas
@@ -162,6 +177,23 @@ export default {
     // 重新設定畫布
     reset () {
       this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    },
+
+    // 儲存圖片
+    saveImage () {
+      // 圖片儲存的類型選擇 png ，並將值放入 img 的 src
+      // const img = this.canvas.toDataURL('image/png')
+      // const obj = { id: this.imgId, src: img }
+      // this.imgs.push(obj)
+      // this.imgId += 1
+      this.imgs.push(this.canvas.toDataURL('image/png'))
+      this.reset()
+    },
+
+    // 刪除簽名
+    deleteImg (index) {
+      this.imgs.splice(index, 1)
+      return this.imgs
     }
   }
 }
@@ -176,7 +208,9 @@ export default {
   height: calc(100vh - 60px - 100px);
   background: $mid-grey;
   > .info {
+    height: calc(100vh - 60px - 100px);
     flex-basis: 23%;
+    // width: 1000px;
     background-color: $white;
     @extend %HeadLine4;
     @extend %fontFamily;
@@ -203,10 +237,32 @@ export default {
       }
       > .MySign {
         text-align: center;
-        padding-top: 25px;
+        padding: 0 35px;
 
+        padding-top: 25px;
         > p {
           font-weight: 700;
+        }
+        > .doneSign {
+          > li {
+            display: block;
+            width: 328px;
+            height: 60px;
+            border: 1px dashed $dark-grey;
+            margin: 0 auto;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            > .pic {
+              height: 60px;
+              width: 90%;
+            }
+            .delete {
+              width: 22px;
+              height: 22px;
+              background-image: url('../assets/image/delete.png');
+            }
+          }
         }
         > .create {
           width: 100%;
@@ -221,8 +277,6 @@ export default {
             margin: 0 auto;
             margin-top: 15px;
             cursor: pointer;
-
-            // line-height: 60px;
             > .icon {
               width: 22px;
               height: 22px;
