@@ -67,7 +67,6 @@
           <ul>
             <li @click="reset" class="clear">清除</li>
             <li class="color-option">
-              <!-- :class="`color-${color.name} ` + isColorActive(color.name)" -->
               <span
                 v-for="(color, index) in colors"
                 class="color"
@@ -181,11 +180,6 @@ export default {
 
     // 儲存圖片
     saveImage () {
-      // 圖片儲存的類型選擇 png ，並將值放入 img 的 src
-      // const img = this.canvas.toDataURL('image/png')
-      // const obj = { id: this.imgId, src: img }
-      // this.imgs.push(obj)
-      // this.imgId += 1
       this.imgs.push(this.canvas.toDataURL('image/png'))
       this.reset()
     },
@@ -297,7 +291,6 @@ export default {
   }
   > .showPdf {
     width: 100%;
-    // background: red;
   }
 }
 
