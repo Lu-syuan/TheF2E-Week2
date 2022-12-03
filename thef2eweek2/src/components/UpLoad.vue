@@ -85,20 +85,13 @@ export default {
       pdfFileTest: [],
       OpenNew: true,
       OpenOld: false,
-      PdfFile: [
-        // {
-        //   id: 0,
-        //   PdfName: '六角學院2022版活動切結書.pdf',
-        //   time: '2022/10/31, 23:45',
-        //   OpenTime: '--'
-        // },
-        // {
-        //   id: 1,
-        //   PdfName: '廠商合約.pdf',
-        //   time: '2022/10/31, 18:01',
-        //   OpenTime: '2022/10/31, 18:05'
-        // }
-      ]
+      PdfFile: []
+    }
+  },
+  mounted () {
+    const storageFile = localStorage.getItem('files')
+    if (storageFile != null) {
+      this.PdfFile = JSON.parse(storageFile)
     }
   },
   computed: {
