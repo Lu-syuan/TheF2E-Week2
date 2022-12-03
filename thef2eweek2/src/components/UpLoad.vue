@@ -20,7 +20,18 @@
       <div class="content-NewFile" v-if="OpenNew">
         <div class="container">
           <div class="text">
-            <p>點擊此處上傳 或 直接拖曳檔案</p>
+            <p>
+              <label for="file-upload">
+                <input
+                  @change="fileUpload"
+                  id="file-upload"
+                  type="file"
+                  accept="application/pdf"
+                  style="display: none"
+                />
+                點擊此處<span>上傳</span> 或 直接拖曳檔案
+              </label>
+            </p>
             <div class="icon">
               <img src="../assets/image/icon-pdf.png" alt="" />
             </div>
@@ -42,9 +53,9 @@
               <p>上傳時間</p>
               <p>上次開啟</p>
             </div>
-            <ol v-for="item in PdfFile" :key="item.id">
-              <li>{{ item.PdfName }}</li>
-              <li>{{ item.time }}</li>
+            <ol v-for="(item, index) in PdfFile" :key="index">
+              <li>{{ item.name }}</li>
+              <li>{{ item.uploadTime }}</li>
               <li>{{ item.OpenTime }}</li>
             </ol>
           </div>
@@ -71,24 +82,31 @@
 export default {
   data () {
     return {
-      OpenNew: false,
-      OpenOld: true,
+      pdfFileTest: [],
+      OpenNew: true,
+      OpenOld: false,
       PdfFile: [
-        {
-          id: 0,
-          PdfName: '六角學院2022版活動切結書.pdf',
-          time: '2022/10/31, 23:45',
-          OpenTime: '--'
-        },
-        {
-          id: 1,
-          PdfName: '廠商合約.pdf',
-          time: '2022/10/31, 18:01',
-          OpenTime: '2022/10/31, 18:05'
-        }
+        // {
+        //   id: 0,
+        //   PdfName: '六角學院2022版活動切結書.pdf',
+        //   time: '2022/10/31, 23:45',
+        //   OpenTime: '--'
+        // },
+        // {
+        //   id: 1,
+        //   PdfName: '廠商合約.pdf',
+        //   time: '2022/10/31, 18:01',
+        //   OpenTime: '2022/10/31, 18:05'
+        // }
       ]
     }
   },
+  computed: {
+    test () {
+      return this.$store.state.pdfFile
+    }
+  },
+
   methods: {
     change (now) {
       if (now === 'New' && this.OpenNew === true) {
@@ -99,6 +117,61 @@ export default {
         this.OpenNew = !this.OpenNew
         this.OpenOld = !this.OpenOld
       }
+    },
+
+    fileUpload (e) {
+      console.log(e.target.files[0])
+
+      // 判斷檔案大小如果大於>10MB禁止上傳
+      const file = e.target.files[0]
+      if (Math.ceil(file.size / 1024 / 1024) > 10) {
+        return window.alert('檔案大小超過10MB')
+      } else {
+        this.pushList(e.target.files)
+      }
+    },
+    pushList (files) {
+      const today = new Date()
+      const uploadTime = `${today.getFullYear()}/${today.getMonth()}/${today.getUTCDate()},${today.getHours()}:${today.getMinutes()}`
+      console.log(uploadTime)
+      const self = this
+
+      if (files.length === 1) {
+        console.log('ok')
+        // 將pdf轉為Base64格式
+        const file = files[0]
+        this.toBase64(file).then(function (base64) {
+          // console.log(base64)
+          const obj = {}
+          obj.name = file.name
+          obj.uploadTime = uploadTime
+          obj.OpenTime = '---'
+          obj.base64 = base64
+          console.log(obj)
+          self.PdfFile.push(obj)
+        })
+      }
+
+      setTimeout(() => {
+        localStorage.setItem('files', JSON.stringify(self.PdfFile))
+      }, 1000)
+    },
+    async toBase64 (file, success = true) {
+      return new Promise((resolve, reject) => {
+        if (success) {
+          const reader = new FileReader()
+          reader.readAsDataURL(file)
+          reader.onload = function () {
+            resolve(reader.result)
+          }
+          reader.onerror = function (error) {
+            console.log('Error', error)
+          }
+        } else {
+          // eslint-disable-next-line prefer-promise-reject-errors
+          reject('失敗')
+        }
+      })
     }
   }
 }
@@ -176,6 +249,13 @@ export default {
           > p {
             color: $dark-grey;
             @extend %HeadLine2;
+            > label {
+              > span {
+                cursor: pointer;
+                text-decoration: underline;
+                color: purple;
+              }
+            }
           }
           > .icon {
             width: 144px;

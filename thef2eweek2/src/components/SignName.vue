@@ -87,9 +87,12 @@
 </template>
 
 <script>
+const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js')
+const workerSrc = require('pdfjs-dist/build/pdf.worker.entry.js')
 export default {
   data () {
     return {
+      // pdfLink: require('@/assets/pdf/test.pdf'),
       imgId: 0,
       show: 'none',
       canvas: null,
@@ -107,6 +110,14 @@ export default {
   mounted () {
     this.currentColor = this.colors[0]
     this.setCanvas()
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
+    pdfjsLib
+      .getDocument('../public/test.pdf')
+      .promise.then((doc) => {
+        console.log(doc)
+      })
+      .catch((err) => console.log(err))
   },
   methods: {
     showCanvas () {
