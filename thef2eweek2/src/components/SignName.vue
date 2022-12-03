@@ -40,7 +40,9 @@
     </div>
     <!-- 側邊簽名攔 end-->
     <!-- 顯示pdf -->
-    <div class="showPdf"></div>
+    <div class="showPdf">
+      <canvas id="canvasPDF" ref="canvasPDF"> </canvas>
+    </div>
 
     <!-- 顯示pdf end-->
 
@@ -87,6 +89,7 @@
 </template>
 
 <script>
+const Base64Prefix = 'data:application/pdf;base64,'
 const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js')
 const workerSrc = require('pdfjs-dist/build/pdf.worker.entry.js')
 export default {
@@ -104,20 +107,28 @@ export default {
       ],
       isPainting: false,
       currentColor: null,
-      imgs: []
+      imgs: [],
+      pdfFile: []
     }
   },
   mounted () {
+    // 讀取localStorage裡的pdf檔
+    const storageFile = localStorage.getItem('files')
+    if (storageFile != null) {
+      this.pdfFile = JSON.parse(storageFile)
+    }
+
     this.currentColor = this.colors[0]
     this.setCanvas()
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
-    pdfjsLib
-      .getDocument('../public/test.pdf')
-      .promise.then((doc) => {
-        console.log(doc)
-      })
-      .catch((err) => console.log(err))
+    // pdfjsLib
+    //   .getDocument('../public/test.pdf')
+    //   .promise.then((doc) => {
+    //     console.log(doc)
+    //   })
+    //   .catch((err) => console.log(err))
+    this.printPDF(this.pdfFile[0])
   },
   methods: {
     showCanvas () {
@@ -199,6 +210,37 @@ export default {
     deleteImg (index) {
       this.imgs.splice(index, 1)
       return this.imgs
+    },
+    // 列印pdf檔
+    printPDF (pdfData) {
+      const self = this
+      // console.log(pdfData)
+      // 將 base64 中的前綴刪去，並進行解碼
+      const data = atob(pdfData.base64.substring(Base64Prefix.length))
+      // 利用解碼的檔案，載入 PDF 檔及第一頁
+      const pdfDoc = pdfjsLib.getDocument({ data })
+      pdfDoc.promise.then(function (pdf) {
+        console.log('PDF loaded')
+        pdf.getPage(1).then(function (page) {
+          console.log('Page loaded')
+          // 設定尺寸及產生 canvas
+          const viewport = page.getViewport({ scale: window.devicePixelRatio })
+          const canvasPDF = self.$refs.canvasPDF
+          const context = canvasPDF.getContext('2d')
+
+          // 設定 PDF 所要顯示的寬高及渲染
+          canvasPDF.height = viewport.height
+          canvasPDF.width = viewport.width
+          const renderContext = {
+            canvasContext: context,
+            viewport
+          }
+          const renderTask = page.render(renderContext)
+
+          // 回傳做好的 PDF canvas
+          return renderTask.promise.then(() => canvasPDF)
+        })
+      })
     }
   }
 }
@@ -302,6 +344,19 @@ export default {
   }
   > .showPdf {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+    // z-index: 2;
+    > #canvasPDF {
+      padding-top: 300px;
+      padding-bottom: 100px;
+      // height: 80%;
+
+      // width: 800px;
+      // z-index: 1;
+    }
   }
 }
 
