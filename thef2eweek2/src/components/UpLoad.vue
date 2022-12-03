@@ -53,7 +53,12 @@
               <p>上傳時間</p>
               <p>上次開啟</p>
             </div>
-            <ol v-for="(item, index) in PdfFile" :key="index">
+            <ol
+              v-for="(item, index) in PdfFile"
+              :key="index"
+              :class="{ active: index == chooseFileIndex }"
+              @click="chooseFile(index)"
+            >
               <li>{{ item.name }}</li>
               <li>{{ item.uploadTime }}</li>
               <li>{{ item.OpenTime }}</li>
@@ -85,7 +90,9 @@ export default {
       pdfFileTest: [],
       OpenNew: true,
       OpenOld: false,
-      PdfFile: []
+      PdfFile: [],
+      isClick: false,
+      chooseFileIndex: 0
     }
   },
   mounted () {
@@ -125,7 +132,9 @@ export default {
     },
     pushList (files) {
       const today = new Date()
-      const uploadTime = `${today.getFullYear()}/${today.getMonth()}/${today.getUTCDate()},${today.getHours()}:${today.getMinutes()}`
+      const uploadTime = `${today.getFullYear()}/${today.getMonth()}/${today.getUTCDate()},${this.uploadTimeFormat(
+        today.getHours()
+      )}:${this.uploadTimeFormat(today.getMinutes())}`
       console.log(uploadTime)
       const self = this
 
@@ -165,6 +174,16 @@ export default {
           reject('失敗')
         }
       })
+    },
+    uploadTimeFormat (time) {
+      console.log('time', time)
+      if (time < 10) {
+        time = `0${time}`
+      }
+      return time
+    },
+    chooseFile (index) {
+      this.chooseFileIndex = index
     }
   }
 }
@@ -329,8 +348,13 @@ export default {
               flex-basis: 25%;
             }
           }
-          > ol:nth-child(3) {
+          > ol:hover {
+            background: $mid-grey;
+            cursor: pointer;
+          }
+          > ol.active {
             background: $light-main;
+            cursor: pointer;
           }
         }
 
